@@ -15,10 +15,14 @@ import { environment } from '../environments/environment';
 import { CadastroComponent } from './components/cadastro/cadastro.component';
 import { RecuperarSenhaComponent } from './components/recuperar-senha/recuperar-senha.component';
 
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HomeComponent } from './components/home/home.component';
+import { AddMovieComponent } from './shared/components/add-movie/add-movie.component';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { FooterComponent } from './shared/components/footer/footer.component'
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, CadastroComponent, RecuperarSenhaComponent],
+  declarations: [AppComponent, LoginComponent, CadastroComponent, RecuperarSenhaComponent, HomeComponent, AddMovieComponent, HeaderComponent, FooterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
