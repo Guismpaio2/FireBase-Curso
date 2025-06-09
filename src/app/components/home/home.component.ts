@@ -15,21 +15,25 @@ export class HomeComponent implements OnInit {
   limit = 4;
   currentOffset = 0;
 
-  // Variável-chave para controlar o dropdown
   activeDropdownMovieId: string | null = null;
+  selectedMovieForEdit: MovieInterface | null = null; // <<< NOVO
 
   constructor(private databaseService: DatabaseService) {}
 
   ngOnInit() {
+    this.loadMovies();
+  }
+
+  loadMovies() {
     this.databaseService
       .getCollection('movies')
       .subscribe((movies: MovieInterface[]) => {
         this.movies = movies;
+        this.filterMovies(); // Aplica o filtro de busca ao carregar/recarregar
         this.updateDisplayedMovies();
       });
   }
 
-  // Atualiza a lista de filmes visíveis (usado na inicialização e paginação)
   updateDisplayedMovies() {
     this.displayedMovies = this.movies.slice(
       this.currentOffset,
@@ -42,30 +46,49 @@ export class HomeComponent implements OnInit {
       .deleteDocument('movies', id)
       .then(() => {
         console.log('Documento excluído com sucesso!');
-        this.closeDropdown(); // Fecha o menu após a exclusão
+        this.closeDropdown();
+        this.loadMovies(); // Recarrega os filmes após a exclusão
       })
       .catch((error) => {
-        // A mensagem de sucesso deve estar no .then()
         console.error('Erro ao excluir documento:', error);
+        alert('Erro ao excluir filme: ' + error.message);
       });
   }
 
-  toggleAddMovieModal() {
-    this.showAddMovieModal = !this.showAddMovieModal;
+  // >>> MÉTODOS PARA O MODAL DE ADIÇÃO/EDIÇÃO <<<
+  openAddMovieModal() {
+    this.selectedMovieForEdit = null; // Garante que estamos em modo de adição
+    this.showAddMovieModal = true;
+    this.closeDropdown(); // Fecha o dropdown se estiver aberto
   }
 
+  openEditMovieModal(movie: MovieInterface) {
+    this.selectedMovieForEdit = { ...movie }; // Passa uma cópia do filme
+    this.showAddMovieModal = true;
+    this.closeDropdown(); // Fecha o dropdown
+  }
+
+  closeAddOrEditModal() {
+    this.showAddMovieModal = false;
+    this.selectedMovieForEdit = null; // Limpa o filme em edição ao fechar
+  }
+
+  onMovieAddedOrUpdated() {
+    this.loadMovies(); // Recarrega os filmes após uma adição ou atualização
+    // O modal já se fecha via `onClose()` no `add-movie.component.ts`
+  }
+  // <<< FIM DOS MÉTODOS PARA O MODAL DE ADIÇÃO/EDIÇÃO >>>
+
   toggleMovieDropdown(movieId: string, event: Event) {
-    event.stopPropagation(); // Impede que o clique feche o menu imediatamente
+    event.stopPropagation();
     this.activeDropdownMovieId =
       this.activeDropdownMovieId === movieId ? null : movieId;
   }
 
-  // Fecha qualquer dropdown que estiver aberto
   closeDropdown() {
     this.activeDropdownMovieId = null;
   }
 
-  // Impede que um clique DENTRO do menu o feche
   stopEventPropagation(event: Event) {
     event.stopPropagation();
   }
@@ -73,15 +96,18 @@ export class HomeComponent implements OnInit {
   filterMovies(): void {
     const query = this.searchQuery.trim().toLowerCase();
     if (query === '') {
-      this.updateDisplayedMovies();
+      // Se a busca estiver vazia, usa todos os filmes
+      this.displayedMovies = this.movies.slice(
+        this.currentOffset,
+        this.currentOffset + this.limit
+      );
       return;
     }
 
     const filtered = this.movies.filter((movie) =>
       movie.name.toLowerCase().includes(query)
     );
-    // Para busca, mostramos todos os resultados, sem paginação
-    this.displayedMovies = filtered;
+    this.displayedMovies = filtered; // Mostra todos os resultados filtrados
   }
 
   showNext() {

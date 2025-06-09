@@ -6,7 +6,9 @@
     <div
       class="px-4 py-3 border-b border-gray-200 flex justify-between items-center"
     >
-      <h5 class="modal-title" id="createCategoryModalLabel">Adicionar Filme</h5>
+      <h5 class="modal-title" id="createCategoryModalLabel">
+        {{ isEditMode ? "Editar Filme" : "Adicionar Filme" }}
+      </h5>
 
       <button class="text-red-600 text-xl" (click)="onClose()">&times;</button>
     </div>
@@ -124,9 +126,14 @@
           <button
             type="submit"
             class="btn-primary"
-            [disabled]="movieForm.invalid || !selectedFile"
+            [disabled]="
+              movieForm.invalid ||
+              (selectedFile === null &&
+                !isEditMode &&
+                !movieForm.value.photo_url)
+            "
           >
-            Adicionar
+            {{ isEditMode ? "Atualizar" : "Adicionar" }}
           </button>
         </div>
       </form>

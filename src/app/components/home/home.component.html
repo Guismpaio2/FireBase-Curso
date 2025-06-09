@@ -29,7 +29,7 @@
       <button
         type="button"
         class="add-movie-button"
-        (click)="toggleAddMovieModal()"
+        (click)="openAddMovieModal()"
       >
         <i class="fas fa-plus"></i>
         <span>Adicionar Filme</span>
@@ -54,7 +54,7 @@
           <div class="card__menu">
             <button
               class="card__menu-trigger"
-              (click)="toggleMovieDropdown(movie.id, $event)"
+              (click)="toggleMovieDropdown(movie.id!, $event)"
               aria-haspopup="true"
               [attr.aria-expanded]="activeDropdownMovieId === movie.id"
             >
@@ -65,6 +65,10 @@
               [class.is-active]="activeDropdownMovieId === movie.id"
               (click)="stopEventPropagation($event)"
             >
+              <button class="dropdown-item" (click)="openEditMovieModal(movie)">
+                <i class="fas fa-edit"></i>
+                <span>Editar</span>
+              </button>
               <button class="dropdown-item" (click)="deleteMovie(movie.id!)">
                 <i class="fas fa-trash-alt"></i>
                 <span>Excluir</span>
@@ -121,6 +125,8 @@
 
   <app-add-movie
     *ngIf="showAddMovieModal"
-    (closeModal)="toggleAddMovieModal()"
+    [movieToEdit]="selectedMovieForEdit"
+    (closeModal)="closeAddOrEditModal()"
+    (movieAddedOrUpdated)="onMovieAddedOrUpdated()"
   ></app-add-movie>
 </div>

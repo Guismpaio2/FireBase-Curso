@@ -1,15 +1,18 @@
-import { DebugEventListener, Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { cp } from 'fs';
+import { Injectable } from '@angular/core';
+import {
+  AngularFirestore,
+  DocumentReference,
+} from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
+import { MovieInterface } from '../interfaces/movie-interface'; // Importe a interface
 
 @Injectable({
   providedIn: 'root',
 })
 export class DatabaseService {
-  constructor(private db: AngularFirestore) {}
+  constructor(private db: AngularFirestore) {} // Use 'db' aqui
 
-  addDocument(collection: string, data: any): Promise<any> {
+  addDocument(collection: string, data: any): Promise<DocumentReference<any>> {
     return this.db.collection(collection).add(data);
   }
 
@@ -17,9 +20,12 @@ export class DatabaseService {
     return this.db.collection(collection).doc(id).valueChanges();
   }
 
-  getCollection(collection: string): Observable<any[]> {
-    return this.db.collection(collection).valueChanges({ idField: 'id' });
+  getCollection(collection: string): Observable<MovieInterface[]> {
+    return this.db
+      .collection<MovieInterface>(collection)
+      .valueChanges({ idField: 'id' });
   }
+
   getCollectionWithFilter(
     collection: string,
     field: string,
@@ -30,7 +36,13 @@ export class DatabaseService {
       .valueChanges({ idField: 'id' });
   }
 
-  // updateDocument(collection: string) {}
+  updateDocument(
+    collectionName: string,
+    id: string,
+    data: Partial<MovieInterface>
+  ): Promise<void> {
+    return this.db.collection(collectionName).doc(id).update(data);
+  }
 
   deleteDocument(collection: string, id: string): Promise<void> {
     return this.db.collection(collection).doc(id).delete();
