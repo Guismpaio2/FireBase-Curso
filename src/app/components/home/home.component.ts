@@ -1,97 +1,126 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MovieInterface } from '../../shared/interfaces/movie-interface';
 import { DatabaseService } from '../../shared/services/database.service';
-import { log } from 'console';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {
-  // VARIÁVEIS
-
-  showAddMovieModal: boolean = false; // controle de exibição do modal de adição de filme
-  searchQuery: string = ''; // controle de pesquisa de filmes
-  displayedMovies: MovieInterface[] = []; // filmes exibidos na tela
+export class HomeComponent implements OnInit {
+  showAddMovieModal = false;
+  searchQuery = '';
+  displayedMovies: MovieInterface[] = [];
   movies: MovieInterface[] = [];
-  limit: number = 4; // 4 filmes no maximo por vez
-  currentOffset: number = 0; // controle de visualização de filmes
+  limit = 4;
+  currentOffset = 0;
+
+  activeDropdownMovieId: string | null = null;
+  selectedMovieForEdit: MovieInterface | null = null; // <<< NOVO
 
   constructor(private databaseService: DatabaseService) {}
 
   ngOnInit() {
+    this.loadMovies();
+  }
+
+  loadMovies() {
     this.databaseService
       .getCollection('movies')
       .subscribe((movies: MovieInterface[]) => {
         this.movies = movies;
-
-        this.displayedMovies = this.movies.slice(
-          this.currentOffset,
-          this.currentOffset + this.limit
-        ); // exibe os 4 filmes iniciais
+        this.filterMovies(); // Aplica o filtro de busca ao carregar/recarregar
+        this.updateDisplayedMovies();
       });
+  }
+
+  updateDisplayedMovies() {
+    this.displayedMovies = this.movies.slice(
+      this.currentOffset,
+      this.currentOffset + this.limit
+    );
   }
 
   deleteMovie(id: string) {
     this.databaseService
       .deleteDocument('movies', id)
-      .then(() => {})
+      .then(() => {
+        console.log('Documento excluído com sucesso!');
+        this.closeDropdown();
+        this.loadMovies(); // Recarrega os filmes após a exclusão
+      })
       .catch((error) => {
-        console.log('Documento excluido com sucesso!');
+        console.error('Erro ao excluir documento:', error);
+        alert('Erro ao excluir filme: ' + error.message);
       });
   }
-  toggleAddMovieModal() {
-    this.showAddMovieModal = !this.showAddMovieModal; // abre e fecha o modal
+
+  // >>> MÉTODOS PARA O MODAL DE ADIÇÃO/EDIÇÃO <<<
+  openAddMovieModal() {
+    this.selectedMovieForEdit = null; // Garante que estamos em modo de adição
+    this.showAddMovieModal = true;
+    this.closeDropdown(); // Fecha o dropdown se estiver aberto
+  }
+
+  openEditMovieModal(movie: MovieInterface) {
+    this.selectedMovieForEdit = { ...movie }; // Passa uma cópia do filme
+    this.showAddMovieModal = true;
+    this.closeDropdown(); // Fecha o dropdown
+  }
+
+  closeAddOrEditModal() {
+    this.showAddMovieModal = false;
+    this.selectedMovieForEdit = null; // Limpa o filme em edição ao fechar
+  }
+
+  onMovieAddedOrUpdated() {
+    this.loadMovies(); // Recarrega os filmes após uma adição ou atualização
+    // O modal já se fecha via `onClose()` no `add-movie.component.ts`
+  }
+  // <<< FIM DOS MÉTODOS PARA O MODAL DE ADIÇÃO/EDIÇÃO >>>
+
+  toggleMovieDropdown(movieId: string, event: Event) {
+    event.stopPropagation();
+    this.activeDropdownMovieId =
+      this.activeDropdownMovieId === movieId ? null : movieId;
+  }
+
+  closeDropdown() {
+    this.activeDropdownMovieId = null;
+  }
+
+  stopEventPropagation(event: Event) {
+    event.stopPropagation();
   }
 
   filterMovies(): void {
     const query = this.searchQuery.trim().toLowerCase();
-    const sanitizedQuery = query.replace(/[\.\-]/g, '');
-
-    if (sanitizedQuery === '') {
-      // Se não houver pesquisa, exibe a página atual normalmente
+    if (query === '') {
+      // Se a busca estiver vazia, usa todos os filmes
       this.displayedMovies = this.movies.slice(
         this.currentOffset,
         this.currentOffset + this.limit
       );
-    } else {
-      // Filtra sobre todos os filmes
-      const filteredMovies = this.movies.filter((movie) => {
-        const titleMatch = movie.name
-          ? movie.name.toLowerCase().includes(sanitizedQuery)
-          : false;
-        return titleMatch;
-      });
-
-      // Reinicia o offset para começar da primeira página do resultado filtrado
-      this.currentOffset = 0;
-      this.displayedMovies = filteredMovies.slice(
-        this.currentOffset,
-        this.currentOffset + this.limit
-      );
+      return;
     }
+
+    const filtered = this.movies.filter((movie) =>
+      movie.name.toLowerCase().includes(query)
+    );
+    this.displayedMovies = filtered; // Mostra todos os resultados filtrados
   }
 
-  // avançar no layout de filmes (4 por vez)
   showNext() {
     if (this.currentOffset + this.limit < this.movies.length) {
       this.currentOffset += this.limit;
-      this.displayedMovies = this.movies.slice(
-        this.currentOffset,
-        this.currentOffset + this.limit
-      );
+      this.updateDisplayedMovies();
     }
   }
 
-  // voltar no layout de filmes (4 por vez)
   showPrevious() {
-    if (this.currentOffset - this.limit >= 0) {
+    if (this.currentOffset > 0) {
       this.currentOffset -= this.limit;
-      this.displayedMovies = this.movies.slice(
-        this.currentOffset,
-        this.currentOffset + this.limit
-      );
+      this.updateDisplayedMovies();
     }
   }
 }
