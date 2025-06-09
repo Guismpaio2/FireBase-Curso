@@ -1,54 +1,132 @@
+/* Variáveis de Cores (reutilizadas do header para consistência) */
+$footer-bg-color: #1a1a1a; // Preto bem escuro para o fundo
+$text-color-light: #f5f5f5; // Branco quase puro para o texto
+$accent-color: #00ff00; // Verde da logo (ou um azul/roxo vibrante)
+$hover-color: #00e600; // Verde mais claro para hover
+$tooltip-text-color: #000; // Cor do texto do tooltip (preto para contraste)
+
 .footer {
   width: 100%;
-  height: 85px;
-  padding: 15px;
+  height: 100px; // Altura ajustada para acomodar apenas os ícones
+  padding: 15px 40px;
   display: flex;
   align-items: center;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: center; // Centraliza os ícones horizontalmente
+  background-color: $footer-bg-color; // Fundo escuro
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4); // Sombra mais proeminente para o topo do footer
+  border-top: 1px solid rgba($accent-color, 0.2); // Leve borda superior colorida
+}
 
-  .images {
-    display: flex;
+.footer .images {
+  display: flex;
+  align-items: center;
+  justify-content: center; // Garante centralização mesmo com "flex" no HTML
+  width: auto; // Remove a largura fixa para flexibilidade
+  gap: 40px; // Aumentei o espaçamento entre as imagens para um visual mais limpo
+
+  a {
+    position: relative;
+    display: flex; // Usar flex para centralizar o img e o tooltip se necessário
     align-items: center;
-    justify-content: space-between;
-    width: 80%;
+    justify-content: center;
+    text-decoration: none;
+  }
 
-    a {
-      position: relative;
-      display: inline-block;
-    }
+  img {
+    height: 55px; // Um pouco maiores para mais destaque
+    width: auto; // Mantém a proporção
+    object-fit: contain;
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out,
+      box-shadow 0.3s ease;
+    border-radius: 12px; // Bordas mais arredondadas para um toque moderno
+    padding: 8px; // Mais padding para o "cartão"
+    background-color: rgba(255, 255, 255, 0.08); // Fundo sutil mais visível
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); // Sombra para as imagens
+    filter: grayscale(80%) brightness(1.2); // Começa em preto e branco e com brilho
+  }
 
-    img {
-      height: 50px;
-      width: 50px;
-      transition: transform 0.3s ease-in-out;
-    }
+  a:hover img {
+    transform: translateY(-5px) scale(1.1); // Movimento para cima e escala maior
+    filter: grayscale(0%) brightness(1.5)
+      drop-shadow(0 0 18px rgba($accent-color, 0.8)); // Cor original, mais brilho e sombra colorida
+    background-color: rgba($accent-color, 0.15); // Fundo sutil verde no hover
+  }
 
-    a:hover img {
-      transform: scale(1.2);
-    }
+  .tooltip-text {
+    position: absolute;
+    bottom: calc(
+      100% + 15px
+    ); // Posiciona o tooltip um pouco mais acima da imagem
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: $accent-color; // Cor de destaque para o tooltip
+    color: $tooltip-text-color; // Texto preto para alto contraste
+    padding: 8px 15px; // Mais padding
+    border-radius: 8px; // Bordas mais arredondadas
+    font-size: 0.9rem; // Tamanho de fonte um pouco maior
+    font-weight: 700; // Mais bold
+    opacity: 0;
+    visibility: hidden;
+    white-space: nowrap;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out,
+      bottom 0.3s ease-in-out;
+    z-index: 10; // Garante que o tooltip fique sobre outros elementos
+    pointer-events: none; // Permite cliques através do tooltip quando não visível
 
-    .tooltip-text {
+    &::after {
+      // Seta do tooltip
+      content: "";
       position: absolute;
-      top: 50%;
-      left: 50px;
-      transform: translateX(-70%);
-      background-color: black;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 14px;
-      font-weight: 500;
-      opacity: 0;
-      visibility: hidden;
-      white-space: nowrap;
-      transition: all 0.3s ease-in-out;
+      bottom: -6px; // Posiciona a seta
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 12px;
+      height: 12px;
+      background-color: $accent-color;
+      border-radius: 3px;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); // Sombra na seta
     }
+  }
 
-    a:hover .tooltip-text {
-      opacity: 1;
-      visibility: visible;
-      transform: translateX(0);
+  a:hover .tooltip-text {
+    opacity: 1;
+    visibility: visible;
+    bottom: calc(100% + 25px); // Sobe mais ao aparecer para um efeito de "pop"
+  }
+}
+
+// Media Queries para responsividade
+@media (max-width: 992px) {
+  .footer .images {
+    gap: 30px;
+    flex-wrap: wrap; // Permite quebrar linha para mais de 3 itens
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    height: auto; // Ajusta a altura automaticamente
+    padding: 20px 20px; // Reduz padding em telas menores
+  }
+
+  .footer .images {
+    gap: 20px; // Espaçamento menor em telas pequenas
+    img {
+      height: 45px; // Tamanho menor das imagens
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .footer .images {
+    gap: 15px;
+    a {
+      flex-basis: 45%; // Duas colunas em telas muito pequenas
+      justify-content: center;
+    }
+    img {
+      height: 40px;
     }
   }
 }

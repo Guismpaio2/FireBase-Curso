@@ -1,43 +1,65 @@
+/* Variáveis de Cores */
+$header-bg-color: #1a1a1a; // Preto bem escuro para o fundo
+$text-color-light: #f5f5f5; // Branco quase puro para o texto
+$accent-color: #00ff00; // Verde da logo (ou um azul/roxo vibrante)
+$dropdown-bg: #282828; // Um cinza escuro para o dropdown
+$dropdown-border: #444; // Borda mais clara para o dropdown
+$hover-color: #00e600; // Verde mais claro para hover (ou um tom mais claro da cor accent)
+
 header {
   height: 85px;
   padding: 15px 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: #1a1a1a; 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); 
+
+  border-bottom: 1px solid $accent-color; 
 
   .logoEfrase {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    background-color: #00e600;
+    border-radius: 5px;
+    width: auto;
+    padding-right: 20px;
 
     .logo {
       width: 55px;
       height: 55px;
       cursor: pointer;
-      margin-right: 50px;
-      transition: transform 0.2s ease-in-out;
+      margin-right: 30px; // Diminuído para um look mais compacto
+      transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out; // Adicionado filter para brilho
 
       &:hover {
-        transform: scale(1.2);
+        transform: scale(1.2); // Escala menor para um efeito mais sutil
+        filter: brightness(1.2); // Leve brilho ao passar o mouse
+        overflow: visible;
       }
     }
 
     .frase-rotativa {
-      font-size: 18px;
-      font-weight: 800;
-      color: black;
-      opacity: 0; /* Começa invisível */
-      animation: fade-in 0.4s ease-in-out forwards; /* Animação suave */
+      font-size: 1.1rem; // Ajuste para tamanho de fonte mais legível
+      font-weight: 600; // Um pouco menos bold, mais elegante
+      color: $text-color-light; // Cor do texto clara
+      opacity: 0;
+      animation: fade-in 0.6s ease-in-out forwards; // Animação mais suave
+      text-shadow: 0 0 5px rgba(0, 255, 0, 0.5); // Sutil brilho esverdeado
+
+      @media (max-width: 768px) {
+        display: none; // Esconde a frase em telas menores para otimização
+      }
     }
 
     @keyframes fade-in {
       0% {
         opacity: 0;
-        /* Sobe levemente no início */
+        transform: translateY(-10px); // Começa um pouco acima
       }
       100% {
         opacity: 1;
-        /* Volta à posição normal */
+        transform: translateY(0);
       }
     }
   }
@@ -53,169 +75,196 @@ header {
   align-items: center;
   cursor: pointer;
   position: relative;
-  margin-right: 100px;
+  margin-right: 50px; // Ajustado
   z-index: 2;
+  padding: 8px 12px; // Adiciona padding para área de clique
+  border-radius: 25px; // Borda arredondada
+  transition: background-color 0.3s ease; // Transição para o fundo
+
+  &:hover {
+    background-color: rgba($accent-color, 0.1); // Fundo sutil ao passar o mouse
+  }
 }
 
 .foto-perfil {
-  width: 40px;
-  height: 40px;
+  width: 45px; // Levemente maior
+  height: 45px; // Levemente maior
   border-radius: 50%;
-  margin-right: 20px;
+  margin-right: 15px;
+  border: 2px solid $accent-color; // Borda colorida ao redor da foto
+  box-shadow: 0 0 8px rgba($accent-color, 0.6); // Sutil brilho
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 }
 
 .nome-usuario {
-  font-weight: 800;
-  font-size: 18px;
-  color: black;
+  font-weight: 700; // Um pouco menos bold
+  font-size: 1.1rem;
+  color: $text-color-light; // Cor do texto clara
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); // Sombra para legibilidade
 }
 
 .icon-seta {
-  width: 15px;
-  height: 15px;
-  margin-left: 15px !important;
-}
-
-.linha-divisoria {
-  width: 1px;
-  height: 85px;
-  background-color: black; /* cor da linha */
-  margin: 0 15px; /* espaçamento entre os elementos */
+  font-size: 12px; // Um pouco menor
+  margin-left: 10px !important;
+  color: $text-color-light;
+  transition: transform 0.3s ease; // Transição para a rotação
+  &.fa-chevron-up {
+    transform: rotate(180deg); // Gira a seta para cima
+  }
 }
 
 .dropdown-conteudo {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 10px); // Distância maior do dropdown
   right: 0;
-  background-color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-radius: 8px; /* bordas arredondadas */
-  padding: 15px 20px; /* mais espaço interno */
+  background-color: $dropdown-bg; // Fundo escuro
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); // Sombra mais proeminente
+  border-radius: 10px; // Bordas mais arredondadas
+  padding: 15px 25px; // Mais padding
   display: flex;
   flex-direction: column;
   z-index: 10;
-  min-width: 160px; /* largura mínima para um layout mais uniforme */
+  min-width: 180px; // Largura mínima
+  border: 1px solid $dropdown-border; // Borda sutil
+  animation: slide-down 0.3s ease-out forwards; // Animação de slide
+
+  @keyframes slide-down {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 .dropdown-conteudo a {
-  font-size: 16px;
-  color: black;
-  padding: 10px 0;
+  font-size: 1rem;
+  color: $text-color-light; // Texto claro
+  padding: 12px 0; // Mais padding
   cursor: pointer;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease, background-color 0.3s ease, padding 0.3s ease;
+  border-radius: 6px; // Bordas arredondadas para os itens
+
+  &:not(:last-child) {
+    border-bottom: 1px solid lighten($dropdown-border, 10%); // Linha mais clara
+  }
+
+  &:hover {
+    color: $hover-color; // Destaque verde no hover
+    background-color: rgba(
+      $accent-color,
+      0.15
+    ); // Fundo sutil ao passar o mouse
+    padding-left: 10px; // Leve indentação para um efeito mais elegante
+  }
 }
 
-.dropdown-conteudo a:not(:last-child) {
-  border-bottom: 1px solid #e0e0e0; /* linha entre os itens, exceto o último */
-}
-
-.dropdown-conteudo a:hover {
-  color: black; /* destaque ao passar o mouse */
-  background-color: #f0f4ff; /* leve fundo azul-claro no hover */
-  border-radius: 4px; /* bordas arredondadas ao hover */
-  padding: 10px;
-}
-
+/* Estilos para o Modal de Logout */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7); // Fundo mais escuro para o overlay
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(5px); // Efeito de desfoque no fundo
 }
 
 .modal-content {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  width: 33%;
-  max-height: 60%;
+  background-color: #333; // Fundo escuro para o modal
+  border-radius: 12px; // Mais arredondado
+  padding: 30px; // Mais padding
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); // Sombra mais forte
+  width: 35%; // Levemente maior
+  max-width: 450px; // Limite de largura para não ficar muito grande
+  text-align: center; // Centraliza o conteúdo
+  border: 1px solid $accent-color; // Borda sutil colorida
+  animation: modal-pop-in 0.3s ease-out forwards; // Animação de entrada
+
+  @keyframes modal-pop-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }
 
 .modal-title {
-  font-size: 25px;
-  color: #070c26;
+  font-size: 1.8rem; // Maior
+  color: $accent-color; // Título verde
   font-weight: 700;
-  margin: 10px 0;
+  margin-bottom: 25px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   img {
-    margin: 0 auto;
-    width: 45px;
-    height: 45px;
-    margin-bottom: 20px;
+    margin: 0 auto 15px; // Ajusta margem
+    width: 50px; // Um pouco maior
+    height: 50px; // Um pouco maior
+    filter: drop-shadow(0 0 5px $accent-color); // Brilho na logo
   }
 }
 
 .modal-text {
-  margin: 10px 0;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-input {
-  margin: 0 auto;
-  font-size: 15px;
-  border: 1px solid #ab9b9b;
-  padding: 5px;
-  border-radius: 5px;
-  width: 90%;
-  outline: none;
-}
-
-.icon-seta {
-  font-size: 14px;
-  margin-left: 5px;
-  color: black;
+  margin-bottom: 30px; // Mais espaço
+  font-size: 1.2rem; // Maior
+  color: $text-color-light; // Texto claro
 }
 
 .modal-buttons {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 10px 0;
+  gap: 15px; // Espaçamento entre botões
 
-  .modal-confirm {
-    margin: 3px 0;
+  .modal-confirm,
+  .modal-cancel {
+    margin: 0; // Remove margens desnecessárias
     color: white;
-    background-color: black;
     border: none;
-    border-radius: 10px;
-    width: 25%;
-    padding: 5px 10px;
+    border-radius: 25px; // Botões mais arredondados
+    width: 120px; // Largura fixa para botões
+    padding: 12px 20px; // Mais padding
     cursor: pointer;
     outline: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease; // Transição para todos os estados
+
+    &:hover {
+      transform: translateY(-2px); // Leve movimento para cima
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); // Sombra ao hover
+    }
+  }
+
+  .modal-confirm {
+    background-color: $accent-color; // Cor verde
+    &:hover {
+      background-color: $hover-color; // Verde mais claro no hover
+    }
   }
 
   .modal-cancel {
-    margin: 3px 0;
-    color: white;
-    background-color: #d90000;
-    border: none;
-    border-radius: 10px;
-    width: 25%;
-    padding: 5px 10px;
-    cursor: pointer;
-    outline: none;
-    margin-right: 5px;
+    background-color: #d90000; // Vermelho original
+    &:hover {
+      background-color: #ff3333; // Vermelho mais claro no hover
+    }
   }
-}
-.modal-message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  color: #070c26;
 }

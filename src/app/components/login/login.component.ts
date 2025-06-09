@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../shared/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service'; // AJUSTADO O CAMINHO!
 
 @Component({
   selector: 'app-login',
@@ -19,10 +19,14 @@ export class LoginComponent {
   }
 
   login() {
-    if(this.email !== '' && this.password !== ''){
-      this.auth.login(this.email, this.password)
+    if (this.email !== '' && this.password !== '') {
+      this.auth.login(this.email, this.password, this.rememberMe);
     } else {
-      alert('Preencha todos os campos')
+      alert('Preencha todos os campos');
     }
+  }
+
+  loginWithGoogle() {
+    this.auth.googleSignIn();
   }
 }

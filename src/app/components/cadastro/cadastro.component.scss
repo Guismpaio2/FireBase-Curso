@@ -1,0 +1,338 @@
+/* cadastro.component.scss - OTIMIZADO PARA VISIBILIDADE E RESPONSIVIDADE */
+
+// ===============================
+// 1. Variáveis de Tema LED Verde
+//    (Mantidas as mesmas)
+// ===============================
+$color-bg-dark: #0a0a0a;
+$color-card-bg: #1c1c1c;
+$color-text-general: #e0e0e0;
+$color-led-green-primary: #00ff00;
+$color-led-green-light: #8aff8a;
+$color-led-green-shadow: rgba(0, 255, 0, 0.8);
+$color-input-border: #333333;
+
+$border-radius-card: 16px;
+$border-radius-elements: 8px;
+$spacing-unit: 8px;
+
+$transition-speed: 0.35s ease-out;
+
+// ===============================
+// 2. Animações (Keyframes)
+//    (Mantidas as mesmas)
+// ===============================
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-$spacing-unit * 4);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes borderGlow {
+  0% {
+    filter: blur(8px);
+    transform: scale(0.99);
+    opacity: 0.6;
+  }
+  50% {
+    filter: blur(20px);
+    transform: scale(1.01);
+    opacity: 1;
+  }
+  100% {
+    filter: blur(8px);
+    transform: scale(0.99);
+    opacity: 0.6;
+  }
+}
+
+// ===============================
+// 3. Estilos Estruturais e de Layout do Componente
+//    AJUSTES PRINCIPAIS AQUI para garantir visibilidade e aproveitamento.
+// ===============================
+
+.page-container {
+  background-color: $color-bg-dark;
+  color: $color-text-general;
+  min-height: 100vh; // Garante que o fundo preencha a tela
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.body-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // Removido min-height: 100vh daqui para evitar sobreposição ou rolagem desnecessária
+  // O flex do .page-container já centraliza verticalmente.
+  width: 100%;
+  padding: $spacing-unit * 3; // Padding geral ligeiramente reduzido para telas menores (24px)
+  box-sizing: border-box;
+}
+
+.form-card-wrapper {
+  width: 90%;
+  max-width: 500px; // Largura máxima ajustada para um equilíbrio melhor
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.9s ease-out;
+  z-index: 1;
+  margin: $spacing-unit * 2 0; // Adiciona uma pequena margem vertical para não "colar" no topo/base da tela
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -$spacing-unit;
+    left: -$spacing-unit;
+    right: -$spacing-unit;
+    bottom: -$spacing-unit;
+    background: linear-gradient(
+      45deg,
+      $color-led-green-primary,
+      rgba(0, 255, 0, 0.5),
+      $color-led-green-primary
+    );
+    z-index: -1;
+    filter: blur(20px);
+    border-radius: $border-radius-card + $spacing-unit;
+    opacity: 0.8;
+    animation: borderGlow 4s infinite alternate;
+  }
+}
+
+.form-card-body {
+  background-color: $color-card-bg;
+  padding: $spacing-unit * 4; // Padding interno reduzido para ganhar espaço vertical (32px)
+  border-radius: $border-radius-card;
+  border: 1px solid rgba($color-led-green-primary, 0.4);
+  box-shadow: 0 0 35px $color-led-green-shadow,
+    inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+// ===============================
+// 4. Estilos dos Elementos do Formulário
+//    Pequenos ajustes de espaçamento e tamanho para melhor encaixe.
+// ===============================
+
+.logo-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: $spacing-unit * 4; // Espaço abaixo da logo ajustado (32px)
+}
+
+.app-logo {
+  height: $spacing-unit * 9; // Tamanho da logo ajustado para telas menores (72px)
+  margin-bottom: $spacing-unit * 4;
+  filter: drop-shadow(0 0 12px $color-led-green-shadow);
+  transition: filter $transition-speed;
+  &:hover {
+    filter: drop-shadow(0 0 25px $color-led-green-primary);
+  }
+}
+
+.form-title {
+  color: $color-led-green-primary;
+  margin-bottom: $spacing-unit * 5; // Espaço abaixo do título ajustado (40px)
+  text-shadow: 0 0 12px $color-led-green-shadow;
+  font-size: 2.2em; // Título ligeiramente menor para economizar espaço
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 1.5px;
+}
+
+.form-group {
+  margin-bottom: $spacing-unit * 4; // Espaço entre os grupos de input ajustado (32px)
+}
+
+.form-label {
+  display: block;
+  margin-bottom: $spacing-unit / 2; // Espaço reduzido entre label e input
+  margin-left: $spacing-unit / 2;
+  color: $color-led-green-light;
+  font-weight: 600;
+  text-shadow: 0 0 4px rgba(0, 255, 0, 0.4);
+  transition: color $transition-speed;
+  font-size: 0.95em;
+}
+
+.form-input {
+  width: 100%;
+  padding: $spacing-unit * 1.5; // Padding dos inputs ligeiramente reduzido (12px)
+  border-radius: $border-radius-elements;
+  margin-top: $spacing-unit; // Espaço acima do input ajustado
+  background-color: $color-bg-dark;
+  color: $color-led-green-light;
+  border: 1px solid $color-input-border;
+  box-shadow: inset 0 0 6px rgba(0, 255, 0, 0.15);
+  transition: border-color $transition-speed, box-shadow $transition-speed;
+  font-size: 1em; // Fonte dos inputs ligeiramente menor
+
+  &:focus {
+    border-color: $color-led-green-primary;
+    outline: none;
+    box-shadow: 0 0 20px $color-led-green-shadow,
+      inset 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+
+  &::placeholder {
+    color: rgba($color-led-green-primary, 0.35);
+  }
+}
+
+.button-section {
+  margin-top: $spacing-unit * 6; // Espaço acima do botão reduzido (48px)
+}
+
+.submit-button {
+  width: 100%;
+  padding: $spacing-unit * 2; // Padding do botão ajustado (16px)
+  border-radius: $border-radius-elements;
+  background-color: $color-led-green-primary;
+  color: $color-bg-dark;
+  font-size: 1.2em; // Fonte do botão ligeiramente menor
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 25px $color-led-green-shadow;
+  transition: background-color $transition-speed, box-shadow $transition-speed,
+    transform $transition-speed;
+
+  &:hover {
+    background-color: $color-led-green-light;
+    box-shadow: 0 0 40px $color-led-green-primary;
+    transform: translateY(-4px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    background-color: darken($color-led-green-primary, 15%);
+    box-shadow: 0 0 15px $color-led-green-shadow;
+  }
+}
+
+.login-redirect-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: $spacing-unit * 5; // Espaço acima ajustado (40px)
+  margin-bottom: $spacing-unit * 2; // Espaço abaixo ajustado
+  font-size: 0.85em; // Fonte ligeiramente menor
+}
+
+.login-text {
+  color: $color-text-general;
+  margin-right: $spacing-unit / 2;
+}
+
+.login-link {
+  color: $color-led-green-primary;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color $transition-speed, text-shadow $transition-speed;
+
+  &:hover {
+    color: $color-led-green-light;
+    text-decoration: underline;
+    text-shadow: 0 0 10px $color-led-green-shadow;
+  }
+}
+
+// ===============================
+// 5. Responsividade (Media Queries)
+//    Refinadas para melhor adaptação e visibilidade em diferentes tamanhos.
+// ===============================
+
+@media (max-width: 768px) {
+  /* Para tablets e telas menores que 768px de largura */
+  .form-card-wrapper {
+    max-width: 95%;
+    margin: $spacing-unit 0; // Margem vertical reduzida
+  }
+
+  .form-card-body {
+    padding: $spacing-unit * 3; // Padding interno ainda menor (24px)
+  }
+
+  .form-title {
+    font-size: 2em; // Título menor
+    margin-bottom: $spacing-unit * 4;
+  }
+
+  .app-logo {
+    height: $spacing-unit * 8; // Logo menor
+    margin-bottom: $spacing-unit * 3;
+  }
+
+  .form-group {
+    margin-bottom: $spacing-unit * 3; // Espaçamento entre grupos menor
+  }
+
+  .form-input {
+    padding: $spacing-unit * 1.2; // Inputs menores
+    font-size: 0.95em;
+  }
+
+  .submit-button {
+    padding: $spacing-unit * 1.8; // Botão menor
+    font-size: 1.05em;
+  }
+
+  .login-redirect-section {
+    margin-top: $spacing-unit * 4; // Espaçamento menor
+  }
+}
+
+@media (max-width: 480px) {
+  /* Para celulares e telas muito pequenas que 480px de largura */
+  .body-wrapper {
+    padding: $spacing-unit * 2; // Padding geral bem pequeno para celulares
+  }
+
+  .form-card-wrapper {
+    width: 100%;
+    max-width: none;
+    margin: 0; // Remove margem vertical em telas muito pequenas
+  }
+
+  .form-card-body {
+    padding: $spacing-unit * 2; // Padding interno mínimo (16px)
+    border-radius: 0; // Remove arredondamento em telas muito pequenas para usar toda a largura
+  }
+
+  .form-title {
+    font-size: 1.8em; // Título ainda menor
+    margin-bottom: $spacing-unit * 3;
+  }
+
+  .app-logo {
+    height: $spacing-unit * 7; // Logo ainda menor
+    margin-bottom: $spacing-unit * 2;
+  }
+
+  .form-group {
+    margin-bottom: $spacing-unit * 3;
+  }
+
+  .form-input {
+    padding: $spacing-unit; // Padding mínimo para inputs
+    font-size: 0.9em;
+  }
+
+  .submit-button {
+    padding: $spacing-unit * 1.5; // Botão bem menor
+    font-size: 1em;
+  }
+
+  .login-redirect-section {
+    margin-top: $spacing-unit * 3;
+    font-size: 0.8em;
+  }
+}

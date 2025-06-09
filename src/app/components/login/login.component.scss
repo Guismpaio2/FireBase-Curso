@@ -1,0 +1,445 @@
+/* login.component.scss */
+
+// ===============================
+// 1. Variáveis de Tema LED Verde (Consistente com cadastro.component.scss)
+// ===============================
+$color-bg-dark: #0a0a0a;
+$color-card-bg: #1c1c1c;
+$color-text-general: #e0e0e0;
+$color-led-green-primary: #00ff00;
+$color-led-green-light: #8aff8a;
+$color-led-green-shadow: rgba(0, 255, 0, 0.8);
+$color-input-border: #333333;
+
+$border-radius-card: 16px;
+$border-radius-elements: 8px;
+$spacing-unit: 8px;
+
+$transition-speed: 0.35s ease-out;
+
+// ===============================
+// 2. Animações (Keyframes) - (Consistente com cadastro.component.scss)
+// ===============================
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-$spacing-unit * 4);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes borderGlow {
+  0% {
+    filter: blur(8px);
+    transform: scale(0.99);
+    opacity: 0.6;
+  }
+  50% {
+    filter: blur(20px);
+    transform: scale(1.01);
+    opacity: 1;
+  }
+  100% {
+    filter: blur(8px);
+    transform: scale(0.99);
+    opacity: 0.6;
+  }
+}
+
+// ===============================
+// 3. Estilos Estruturais e de Layout do Componente (Consistente com cadastro.component.scss)
+// ===============================
+
+.page-container {
+  background-color: $color-bg-dark;
+  color: $color-text-general;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.body-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: $spacing-unit * 3;
+  box-sizing: border-box;
+}
+
+.form-card-wrapper {
+  width: 90%;
+  max-width: 500px; // Largura máxima do card
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.9s ease-out;
+  z-index: 1;
+  margin: $spacing-unit * 2 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -$spacing-unit;
+    left: -$spacing-unit;
+    right: -$spacing-unit;
+    bottom: -$spacing-unit;
+    background: linear-gradient(
+      45deg,
+      $color-led-green-primary,
+      rgba(0, 255, 0, 0.5),
+      $color-led-green-primary
+    );
+    z-index: -1;
+    filter: blur(20px);
+    border-radius: $border-radius-card + $spacing-unit;
+    opacity: 0.8;
+    animation: borderGlow 4s infinite alternate;
+  }
+}
+
+.form-card-body {
+  background-color: $color-card-bg;
+  padding: $spacing-unit * 4; // Padding interno do card
+  border-radius: $border-radius-card;
+  border: 1px solid rgba($color-led-green-primary, 0.4);
+  box-shadow: 0 0 35px $color-led-green-shadow,
+    inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+// ===============================
+// 4. Estilos dos Elementos do Formulário (Reaproveitados do Cadastro)
+// ===============================
+
+.logo-section {
+  scale: (1.5);
+  display: flex;
+  justify-content: center;
+  margin-bottom: $spacing-unit * 4;
+}
+
+.app-logo {
+  background-color: #00ff00;
+  border-radius: 5px;
+  margin-top: 20px;
+  height: $spacing-unit * 9;
+  margin-bottom: $spacing-unit * 4;
+  filter: drop-shadow(0 0 12px $color-led-green-shadow);
+  transition: filter $transition-speed;
+  &:hover {
+    filter: drop-shadow(0 0 25px $color-led-green-primary);
+  }
+}
+
+.form-title {
+  color: $color-led-green-primary;
+  margin-bottom: $spacing-unit * 5;
+  text-shadow: 0 0 12px $color-led-green-shadow;
+  font-size: 2.2em;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 1.5px;
+}
+
+.form-group {
+  margin-bottom: $spacing-unit * 4;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: $spacing-unit / 2;
+  margin-left: $spacing-unit / 2;
+  color: $color-led-green-light;
+  font-weight: 600;
+  text-shadow: 0 0 4px rgba(0, 255, 0, 0.4);
+  transition: color $transition-speed;
+  font-size: 0.95em;
+}
+
+.form-input {
+  width: 100%;
+  padding: $spacing-unit * 1.5;
+  border-radius: $border-radius-elements;
+  margin-top: $spacing-unit;
+  background-color: $color-bg-dark;
+  color: $color-led-green-light;
+  border: 1px solid $color-input-border;
+  box-shadow: inset 0 0 6px rgba(0, 255, 0, 0.15);
+  transition: border-color $transition-speed, box-shadow $transition-speed;
+  font-size: 1em;
+
+  &:focus {
+    border-color: $color-led-green-primary;
+    outline: none;
+    box-shadow: 0 0 20px $color-led-green-shadow,
+      inset 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+
+  &::placeholder {
+    color: rgba($color-led-green-primary, 0.35);
+  }
+}
+
+// Estilos específicos para a página de Login
+.login-options-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-unit * 4;
+  font-size: 0.85em; // Tamanho de fonte menor para esta seção
+}
+
+.remember-me-group {
+  display: flex;
+  align-items: center;
+  margin-left: $spacing-unit / 2;
+}
+
+.remember-me-checkbox {
+  margin-right: $spacing-unit;
+  // Estilo personalizado para checkbox (opcional, pode ser mais complexo)
+  width: 16px;
+  height: 16px;
+  appearance: none; // Remove o estilo padrão
+  border: 1px solid $color-led-green-primary;
+  border-radius: 3px;
+  background-color: $color-bg-dark;
+  cursor: pointer;
+  position: relative;
+  transition: all $transition-speed;
+
+  &:checked {
+    background-color: $color-led-green-primary;
+    border-color: $color-led-green-primary;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 1px;
+      left: 4px;
+      width: 5px;
+      height: 10px;
+      border: solid $color-bg-dark;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+.remember-me-label {
+  color: $color-text-general;
+  cursor: pointer;
+}
+
+.forgot-password-link {
+  color: $color-led-green-primary;
+  text-decoration: none;
+  font-weight: 500;
+  margin-right: $spacing-unit / 2;
+  transition: color $transition-speed, text-shadow $transition-speed;
+
+  &:hover {
+    color: $color-led-green-light;
+    text-decoration: underline;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+  }
+}
+
+.button-section {
+  margin-bottom: $spacing-unit * 2; // Espaço entre os botões
+}
+
+.submit-button {
+  width: 100%;
+  padding: $spacing-unit * 2;
+  border-radius: $border-radius-elements;
+  background-color: $color-led-green-primary;
+  color: $color-bg-dark;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 25px $color-led-green-shadow;
+  transition: background-color $transition-speed, box-shadow $transition-speed,
+    transform $transition-speed;
+
+  &:hover {
+    background-color: $color-led-green-light;
+    box-shadow: 0 0 40px $color-led-green-primary;
+    transform: translateY(-4px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    background-color: darken($color-led-green-primary, 15%);
+    box-shadow: 0 0 15px $color-led-green-shadow;
+  }
+}
+
+.secondary-button {
+  width: 100%;
+  padding: $spacing-unit * 1.8;
+  border-radius: $border-radius-elements;
+  background-color: transparent; // Fundo transparente
+  color: $color-led-green-light; // Texto verde claro
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  border: 1px solid rgba($color-led-green-primary, 0.6); // Borda verde sutil
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); // Sombra sutil
+  transition: background-color $transition-speed, box-shadow $transition-speed,
+    color $transition-speed, border-color $transition-speed;
+
+  &:hover {
+    background-color: rgba(
+      $color-led-green-primary,
+      0.1
+    ); // Fundo levemente verde no hover
+    box-shadow: 0 0 20px $color-led-green-shadow; // Aumenta o brilho
+    color: $color-led-green-primary;
+  }
+}
+
+.google-login-button {
+  width: 100%;
+  padding: $spacing-unit * 1.8;
+  border-radius: $border-radius-elements;
+  background-color: transparent;
+  color: $color-text-general; // Texto branco/cinza claro
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  border: 1px solid $color-input-border; // Borda mais escura
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.1); // Sombra sutil branca/cinza
+  transition: background-color $transition-speed, box-shadow $transition-speed,
+    color $transition-speed, border-color $transition-speed;
+  display: flex; // Para alinhar ícone e texto
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: rgba($color-text-general, 0.05); // Leve fundo no hover
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); // Brilho maior
+  }
+}
+
+.google-icon {
+  width: 24px; // Tamanho do ícone do Google
+  height: 24px;
+  margin-right: $spacing-unit; // Espaço entre ícone e texto
+}
+
+.separator-or-section {
+  display: flex;
+  align-items: center;
+  margin-top: $spacing-unit * 3;
+  margin-bottom: $spacing-unit * 3;
+  color: $color-text-general;
+  font-size: 0.85em;
+}
+
+.separator-line {
+  flex-grow: 1; // Ocupa o espaço restante
+  height: 1px;
+  background-color: $color-input-border; // Linha sutil
+  margin: 0 $spacing-unit; // Espaço ao redor do "Ou"
+}
+
+.separator-text {
+  padding: 0 $spacing-unit;
+  color: $color-text-general;
+  font-weight: 500;
+}
+
+// ===============================
+// 5. Responsividade (Media Queries) - Consistente com cadastro.component.scss
+// ===============================
+
+@media (max-width: 768px) {
+  .form-card-wrapper {
+    max-width: 95%;
+    margin: $spacing-unit 0;
+  }
+  .form-card-body {
+    padding: $spacing-unit * 3;
+  }
+  .form-title {
+    font-size: 2em;
+    margin-bottom: $spacing-unit * 4;
+  }
+  .app-logo {
+    height: $spacing-unit * 8;
+    margin-bottom: $spacing-unit * 3;
+  }
+  .form-group {
+    margin-bottom: $spacing-unit * 3;
+  }
+  .form-input {
+    padding: $spacing-unit * 1.2;
+    font-size: 0.95em;
+  }
+  .submit-button {
+    padding: $spacing-unit * 1.8;
+    font-size: 1.05em;
+  }
+  .secondary-button,
+  .google-login-button {
+    padding: $spacing-unit * 1.5;
+    font-size: 1em;
+  }
+  .login-options-section,
+  .separator-or-section {
+    margin-top: $spacing-unit * 2;
+    margin-bottom: $spacing-unit * 2;
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 480px) {
+  .body-wrapper {
+    padding: $spacing-unit * 2;
+  }
+  .form-card-wrapper {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+  .form-card-body {
+    padding: $spacing-unit * 2;
+    border-radius: 0;
+  }
+  .form-title {
+    font-size: 1.8em;
+    margin-bottom: $spacing-unit * 3;
+  }
+  .app-logo {
+    height: $spacing-unit * 7;
+    margin-bottom: $spacing-unit * 2;
+  }
+  .form-group {
+    margin-bottom: $spacing-unit * 3;
+  }
+  .form-input {
+    padding: $spacing-unit;
+    font-size: 0.9em;
+  }
+  .submit-button {
+    padding: $spacing-unit * 1.5;
+    font-size: 1em;
+  }
+  .secondary-button,
+  .google-login-button {
+    padding: $spacing-unit * 1.2;
+    font-size: 0.9em;
+  }
+  .login-options-section,
+  .separator-or-section {
+    margin-top: $spacing-unit * 1.5;
+    margin-bottom: $spacing-unit * 1.5;
+    font-size: 0.75em;
+  }
+}

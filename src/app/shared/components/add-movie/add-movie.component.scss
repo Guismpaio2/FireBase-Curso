@@ -1,83 +1,266 @@
-$black: black;
-$white: #ffffff;
-$red: #d90000;
-$gray: #e5e5e5;
+/* Variáveis de Cores */
+$modal-bg-color: #282828;
+$modal-border-color: #00ff00;
+$text-color-light: #f5f5f5;
+$text-color-dark: #cccccc;
+$accent-color: #00ff00;
+$accent-hover-color: #00e600;
+$input-bg-color: #3a3a3a;
+$input-border-color: #555;
+$input-focus-border: #00e600;
+$placeholder-color: #999;
+$star-color-filled: #00ff00;
+$star-color-empty: #555;
+$red-close-button: #d90000;
+$black: #000000; // Definindo $black explicitamente aqui
 
-// Estilos principais
-#createCategoryModal {
-  .bg-white {
-    background-color: $white;
+// Estilo do Overlay
+.fixed.inset-0.bg-black.bg-opacity-70 {
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+// Estilo do Conteúdo Principal do Modal
+.bg-white.text-black.rounded-lg.shadow-lg {
+  background-color: $modal-bg-color;
+  color: $text-color-light;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0, 255, 0, 0.2);
+  border: 1px solid rgba($modal-border-color, 0.3);
+  transition: all 0.3s ease-out; // Transição para todas as propriedades relevantes
+}
+
+// Estilo do Header do Modal
+.px-4.py-3.border-b.border-gray-200 {
+  border-bottom: 1px solid rgba($modal-border-color, 0.15);
+  padding: 15px 20px;
+}
+
+// Estilo do Título do Modal
+.modal-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: $accent-color;
+  text-shadow: 0 0 5px rgba($accent-color, 0.5);
+}
+
+// Estilo do Botão de Fechar (X)
+.text-red-600.text-xl {
+  color: $red-close-button;
+  font-size: 2rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    color: lighten($red-close-button, 10%);
+    transform: rotate(90deg);
+  }
+}
+
+// Estilo do Padding do Conteúdo
+.p-4 {
+  padding: 20px;
+}
+
+// Estilo do Grid
+.grid.grid-cols-1.md\:grid-cols-2.gap-4 {
+  gap: 25px;
+}
+
+// Estilo do Placeholder de Imagem
+.img-placeholder {
+  width: 130px;
+  height: 130px;
+  background-color: $input-bg-color;
+  border: 1px dashed rgba($accent-color, 0.4);
+  border-radius: 12px;
+  box-shadow: inset 0 0 10px rgba($accent-color, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 70px;
+    height: 70px;
+    filter: drop-shadow(0 0 8px rgba($accent-color, 0.6));
+    opacity: 0.8;
+  }
+}
+
+// Estilo do Texto "Inserir Imagem"
+.inserir-imagem {
+  color: $accent-color;
+  font-weight: 500;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+
+  &:hover {
+    color: $accent-hover-color; // Corrigido para $accent-hover-color
+    text-shadow: 0 0 6px rgba($accent-color, 0.7);
+    text-decoration: none;
+  }
+}
+
+// Estilo das Labels dos Campos
+label.block.text-sm.font-medium {
+  color: $text-color-light;
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+// Estilo dos Campos de Input e Textarea
+.input-field {
+  background-color: $input-bg-color;
+  color: $text-color-light;
+  border: 1px solid $input-border-color;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &::placeholder {
+    color: $placeholder-color;
   }
 
-  .text-black {
-    color: $black;
+  &:focus {
+    border-color: $input-focus-border;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($input-focus-border, 0.2);
+  }
+}
+
+textarea.input-field {
+  height: 110px;
+  resize: vertical;
+}
+
+// Estilo das Estrelas de Avaliação
+#starRating {
+  .fa-star {
+    font-size: 1.6rem;
+    color: $star-color-empty;
+    transition: color 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 
-  .text-red-600 {
-    color: $red;
+  .text-yellow-500 {
+    color: $star-color-filled;
+    text-shadow: 0 0 8px rgba($star-color-filled, 0.7);
+  }
+}
+
+// Estilo do Container do Botão
+.flex.justify-end.border-t.border-gray-200.pt-3.space-x-2 {
+  border-top: 1px solid rgba($modal-border-color, 0.15);
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+// Estilo do Botão "Adicionar"
+.btn-primary {
+  background-color: $accent-color;
+  color: $black; // Corrigido para $black
+  padding: 0.7rem 1.5rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    background-color: $accent-hover-color; // Corrigido para $accent-hover-color
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba($accent-color, 0.4);
+  }
+
+  &:disabled {
+    background-color: #444 !important;
+    color: #888 !important;
+    cursor: not-allowed !important;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+  }
+}
+
+// Media Queries para responsividade
+@media (max-width: 768px) {
+  .bg-white.text-black.rounded-lg.shadow-lg {
+    width: 90%;
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .px-4.py-3.border-b.border-gray-200 {
+    padding: 12px 15px;
   }
 
   .modal-title {
-    font-size: 22px;
+    font-size: 1.4rem;
   }
 
-  .text-black-300 {
-    color: $black;
+  .text-red-600.text-xl {
+    font-size: 1.8rem;
   }
 
-  .rounded-lg {
-    border-radius: 12px;
+  .p-4 {
+    padding: 15px;
   }
 
-  textarea {
-    height: 150px;
-  }
-
-  .input-field {
-    background-color: $white;
-    color: black;
-    border: 1px solid $black;
-    padding: 0.5rem;
-    width: 100%;
-    border-radius: 8px;
-    transition: border 0.2s ease-in-out;
-
-    &:focus {
-      border-color: $black;
-      outline: none;
-    }
-  }
-
-  .btn-primary {
-    background-color: $black;
-    color: $white;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: darken($black, 10%);
-    }
-  }
-
-  .btn-disabled {
-    background-color: #d1d5db !important; /* Cinza claro */
-    color: #6b7280 !important; /* Cinza escuro */
-    cursor: not-allowed !important;
-  }
-
-  .inserir-imagem {
-    text-decoration: underline;
+  .grid.grid-cols-1.md\:grid-cols-2.gap-4 {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 
   .img-placeholder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 100px;
     height: 100px;
-    border-radius: 12px;
-    margin-bottom: 1rem;
+    img {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  .flex.justify-end.border-t.border-gray-200.pt-3.space-x-2 {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-title {
+    font-size: 1.2rem;
+  }
+
+  .text-red-600.text-xl {
+    font-size: 1.6rem;
+  }
+
+  .img-placeholder {
+    width: 80px;
+    height: 80px;
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .input-field,
+  textarea.input-field {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  #starRating .fa-star {
+    font-size: 1.4rem;
   }
 }

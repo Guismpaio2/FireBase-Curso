@@ -1,126 +1,482 @@
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+/* recuperar-senha.component.scss */
 
-.modal-content {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  width: 33%;
-  max-height: 60%;
-}
+// ===============================
+// 1. Variáveis de Tema LED Verde (Consistente com outras páginas)
+// ===============================
+$color-bg-dark: #0a0a0a;
+$color-card-bg: #1c1c1c;
+$color-text-general: #e0e0e0;
+$color-led-green-primary: #00ff00;
+$color-led-green-light: #8aff8a;
+$color-led-green-shadow: rgba(0, 255, 0, 0.8);
+$color-input-border: #333333;
 
-.modal-title {
-  font-size: 25px;
-  color: #070c26;
-  font-weight: 700;
-  margin: 10px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  img {
-    margin: 0 auto;
-    width: 45px;
-    height: 45px;
-    margin-bottom: 20px;
+$border-radius-card: 16px;
+$border-radius-elements: 8px;
+$spacing-unit: 8px;
+
+$transition-speed: 0.35s ease-out;
+
+// ===============================
+// 2. Animações (Keyframes) - (Consistente com outras páginas)
+// ===============================
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-$spacing-unit * 4);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.modal-text {
-  margin: 10px 0;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+@keyframes borderGlow {
+  0% {
+    filter: blur(8px);
+    transform: scale(0.99);
+    opacity: 0.6;
+  }
+  50% {
+    filter: blur(20px);
+    transform: scale(1.01);
+    opacity: 1;
+  }
+  100% {
+    filter: blur(8px);
+    transform: scale(0.99);
+    opacity: 0.6;
+  }
 }
 
-.modal-input {
-  margin: 0 auto;
-  font-size: 15px;
-  border: 1px solid #ab9b9b;
-  padding: 5px;
-  border-radius: 5px;
+// Animação para o modal
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ===============================
+// 3. Estilos Estruturais e de Layout do Componente
+// ===============================
+
+.page-container {
+  background-color: $color-bg-dark;
+  color: $color-text-general;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.body-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: $spacing-unit * 3;
+  box-sizing: border-box;
+}
+
+.form-card-wrapper {
   width: 90%;
-  outline: none;
+  max-width: 500px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.9s ease-out;
+  z-index: 1;
+  margin: $spacing-unit * 2 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -$spacing-unit;
+    left: -$spacing-unit;
+    right: -$spacing-unit;
+    bottom: -$spacing-unit;
+    background: linear-gradient(
+      45deg,
+      $color-led-green-primary,
+      rgba(0, 255, 0, 0.5),
+      $color-led-green-primary
+    );
+    z-index: -1;
+    filter: blur(20px);
+    border-radius: $border-radius-card + $spacing-unit;
+    opacity: 0.8;
+    animation: borderGlow 4s infinite alternate;
+  }
+}
+
+.form-card-body {
+  background-color: $color-card-bg;
+  padding: $spacing-unit * 4;
+  border-radius: $border-radius-card;
+  border: 1px solid rgba($color-led-green-primary, 0.4);
+  box-shadow: 0 0 35px $color-led-green-shadow,
+    inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+// ===============================
+// 4. Estilos dos Elementos do Formulário de Recuperação de Senha
+// ===============================
+
+.icon-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: $spacing-unit * 4;
+}
+
+.recovery-icon {
+  height: $spacing-unit * 9; // Tamanho do ícone
+  filter: drop-shadow(0 0 12px $color-led-green-shadow);
+  transition: filter $transition-speed;
+  &:hover {
+    filter: drop-shadow(0 0 25px $color-led-green-primary);
+  }
+}
+
+.message-section {
+  text-align: center;
+  margin-bottom: $spacing-unit * 5;
+}
+
+.message-title {
+  color: $color-led-green-primary;
+  text-shadow: 0 0 10px $color-led-green-shadow;
+  font-size: 1.8em; // Título menor que o de cadastro/login, mais focado na mensagem
+  font-weight: 700;
+  margin-bottom: $spacing-unit * 2;
+}
+
+.message-text {
+  color: $color-text-general;
+  font-size: 0.9em;
+  line-height: 1.5;
+  padding: 0 $spacing-unit * 2; // Pequeno padding horizontal para o texto
+}
+
+.form-group {
+  margin-bottom: $spacing-unit * 4;
+}
+
+.form-input {
+  width: 100%;
+  padding: $spacing-unit * 1.5;
+  border-radius: $border-radius-elements;
+  margin-top: $spacing-unit;
+  background-color: $color-bg-dark;
+  color: $color-led-green-light;
+  border: 1px solid $color-input-border;
+  box-shadow: inset 0 0 6px rgba(0, 255, 0, 0.15);
+  transition: border-color $transition-speed, box-shadow $transition-speed;
+  font-size: 1em;
+
+  &:focus {
+    border-color: $color-led-green-primary;
+    outline: none;
+    box-shadow: 0 0 20px $color-led-green-shadow,
+      inset 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+
+  &::placeholder {
+    color: rgba($color-led-green-primary, 0.35);
+  }
+}
+
+.button-section {
+  margin-bottom: $spacing-unit * 2;
+}
+
+.submit-button {
+  width: 100%;
+  padding: $spacing-unit * 2;
+  border-radius: $border-radius-elements;
+  background-color: $color-led-green-primary;
+  color: $color-bg-dark;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 25px $color-led-green-shadow;
+  transition: background-color $transition-speed, box-shadow $transition-speed,
+    transform $transition-speed;
+
+  &:hover {
+    background-color: $color-led-green-light;
+    box-shadow: 0 0 40px $color-led-green-primary;
+    transform: translateY(-4px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    background-color: darken($color-led-green-primary, 15%);
+    box-shadow: 0 0 15px $color-led-green-shadow;
+  }
+}
+
+.separator-or-section {
+  display: flex;
+  align-items: center;
+  margin-top: $spacing-unit * 4;
+  margin-bottom: $spacing-unit * 4;
+  color: $color-text-general;
+  font-size: 0.85em;
+}
+
+.separator-line {
+  flex-grow: 1;
+  height: 1px;
+  background-color: $color-input-border;
+  margin: 0 $spacing-unit;
+}
+
+.separator-text {
+  padding: 0 $spacing-unit;
+  color: $color-text-general;
+  font-weight: 500;
+}
+
+.create-account-section {
+  text-align: center;
+  margin-top: $spacing-unit * 3;
+}
+
+.create-account-link {
+  color: $color-led-green-primary;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color $transition-speed, text-shadow $transition-speed;
+
+  &:hover {
+    color: $color-led-green-light;
+    text-decoration: underline;
+    text-shadow: 0 0 10px $color-led-green-shadow;
+  }
+}
+
+// ===============================
+// 6. Estilos do Modal de Verificação
+// ===============================
+.modal-overlay {
+  position: fixed; // Fica fixo na tela
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7); // Fundo escuro transparente
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; // Garante que fique acima de todo o resto
+  animation: fadeIn 0.3s ease-out; // Animação de entrada suave
+}
+
+.modal-content {
+  background-color: $color-card-bg;
+  padding: $spacing-unit * 4;
+  border-radius: $border-radius-card;
+  border: 1px solid rgba($color-led-green-primary, 0.4);
+  box-shadow: 0 0 40px $color-led-green-shadow,
+    inset 0 0 15px rgba(0, 0, 0, 0.6);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: modalAppear 0.4s ease-out; // Animação de aparição do modal
+}
+
+.modal-header {
+  display: flex;
+  flex-direction: column; // Logo em cima do título
+  align-items: center;
+  margin-bottom: $spacing-unit * 3;
+}
+
+.modal-logo {
+  height: $spacing-unit * 8; // Tamanho da logo no modal
+  margin-bottom: $spacing-unit * 2;
+  filter: drop-shadow(0 0 10px $color-led-green-shadow);
+}
+
+.modal-title {
+  color: $color-led-green-primary;
+  font-size: 1.8em;
+  font-weight: 700;
+  text-shadow: 0 0 10px $color-led-green-shadow;
+  margin-bottom: $spacing-unit;
+}
+
+.modal-text {
+  color: $color-text-general;
+  font-size: 1em;
+  margin-bottom: $spacing-unit * 4;
+  line-height: 1.6;
 }
 
 .modal-buttons {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 10px 0;
-
-  .modal-confirm {
-    margin: 3px 0;
-    color: white;
-    background-color: #142147;
-    border: none;
-    border-radius: 10px;
-    width: 25%;
-    padding: 5px 10px;
-    cursor: pointer;
-    outline: none;
-  }
-
-  .modal-cancel {
-    margin: 3px 0;
-    color: white;
-    background-color: #d90000;
-    border: none;
-    border-radius: 10px;
-    width: 25%;
-    padding: 5px 10px;
-    cursor: pointer;
-    outline: none;
-    margin-right: 5px;
-  }
-}
-.modal-message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  color: black;
 }
 
-.page {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: rgba(0, 0, 0, 0.76);
+.modal-action-button {
+  padding: $spacing-unit * 1.5 $spacing-unit * 3;
+  border-radius: $border-radius-elements;
+  background-color: $color-led-green-primary;
+  color: $color-bg-dark;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 20px $color-led-green-shadow;
+  transition: background-color $transition-speed, box-shadow $transition-speed,
+    transform $transition-speed;
 
-  .form-control {
-    border: 1px solid rgb(194, 192, 192);
+  &:hover {
+    background-color: $color-led-green-light;
+    box-shadow: 0 0 30px $color-led-green-primary;
+    transform: translateY(-2px);
+  }
+  &:active {
+    transform: translateY(0);
+    background-color: darken($color-led-green-primary, 10%);
+    box-shadow: 0 0 10px $color-led-green-shadow;
+  }
+}
+
+// ===============================
+// 7. Responsividade (Media Queries)
+// ===============================
+
+@media (max-width: 768px) {
+  .form-card-wrapper {
+    max-width: 95%;
+    margin: $spacing-unit 0;
+  }
+  .form-card-body {
+    padding: $spacing-unit * 3;
+  }
+  .recovery-icon {
+    height: $spacing-unit * 8;
+    margin-bottom: $spacing-unit * 3;
+  }
+  .message-title {
+    font-size: 1.6em;
+    margin-bottom: $spacing-unit * 2;
+  }
+  .message-text {
+    font-size: 0.85em;
+  }
+  .form-group {
+    margin-bottom: $spacing-unit * 3;
+  }
+  .form-input {
+    padding: $spacing-unit * 1.2;
+    font-size: 0.95em;
+  }
+  .submit-button {
+    padding: $spacing-unit * 1.8;
+    font-size: 1.05em;
+  }
+  .separator-or-section {
+    margin-top: $spacing-unit * 3;
+    margin-bottom: $spacing-unit * 3;
+    font-size: 0.8em;
+  }
+  .create-account-link {
+    font-size: 0.9em;
+  }
+
+  // Modal responsivo
+  .modal-content {
+    padding: $spacing-unit * 3;
+    max-width: 350px;
+  }
+  .modal-logo {
+    height: $spacing-unit * 7;
+    margin-bottom: $spacing-unit;
+  }
+  .modal-title {
+    font-size: 1.5em;
+  }
+  .modal-text {
+    font-size: 0.9em;
+    margin-bottom: $spacing-unit * 3;
+  }
+  .modal-action-button {
+    padding: $spacing-unit * 1.2 $spacing-unit * 2;
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .body-wrapper {
+    padding: $spacing-unit * 2;
+  }
+  .form-card-wrapper {
     width: 100%;
-    border-radius: 5px;
-    padding: 10px 10px 10px 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    outline: none;
+    max-width: none;
+    margin: 0;
+  }
+  .form-card-body {
+    padding: $spacing-unit * 2;
+    border-radius: 0;
+  }
+  .recovery-icon {
+    height: $spacing-unit * 7;
+    margin-bottom: $spacing-unit * 2;
+  }
+  .message-title {
+    font-size: 1.5em;
+    margin-bottom: $spacing-unit * 2;
+  }
+  .message-text {
+    font-size: 0.8em;
+    padding: 0 $spacing-unit;
+  }
+  .form-group {
+    margin-bottom: $spacing-unit * 2;
+  }
+  .form-input {
+    padding: $spacing-unit;
+    font-size: 0.9em;
+  }
+  .submit-button {
+    padding: $spacing-unit * 1.5;
+    font-size: 1em;
+  }
+  .separator-or-section {
+    margin-top: $spacing-unit * 2;
+    margin-bottom: $spacing-unit * 2;
+    font-size: 0.75em;
+  }
+  .create-account-link {
+    font-size: 0.85em;
   }
 
-  .msg {
-    font: bold;
-    font-size: 20px;
+  // Modal responsivo para celular
+  .modal-content {
+    padding: $spacing-unit * 2;
+    border-radius: $border-radius-elements; // Menor arredondamento
   }
-
-  .texto {
-    padding-left: 70px;
-    padding-right: 70px;
-    font-size: 15px;
+  .modal-logo {
+    height: $spacing-unit * 6;
+  }
+  .modal-title {
+    font-size: 1.3em;
+  }
+  .modal-text {
+    font-size: 0.85em;
+    margin-bottom: $spacing-unit * 2;
+  }
+  .modal-action-button {
+    padding: $spacing-unit $spacing-unit * 1.5;
+    font-size: 0.9em;
   }
 }

@@ -1,176 +1,383 @@
+:host {
+  // Cores de Fundo
+  --bg-page: #1a202c; // Um azul bem escuro, quase preto
+  --bg-card: #2d3748; // Um cinza-azulado para os cards
+  --bg-input: #4a5568; // Fundo dos inputs
+
+  // Cores de Texto
+  --text-light: #f7fafc; // Branco, para títulos e textos importantes
+  --text-mid: #a0aec0; // Cinza claro, para parágrafos e placeholders
+  --text-dark: #1a202c; // Para usar em fundos claros
+
+  // Cores de Destaque (Accent)
+  --accent-green: #38a169; // Verde do botão "Adicionar"
+  --accent-green-hover: #2f855a;
+  --accent-yellow: #38a169; // Para as estrelas de avaliação
+
+  // Bordas e Sombras
+  --border-color: #4a5568;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+
+  // Outros
+  --font-family: "Nunito Sans", "Segoe UI", sans-serif;
+  --border-radius: 8px;
+}
+
+// ==========================================================================
+// ESTILOS GLOBAIS DO COMPONENTE
+// ==========================================================================
+
+.search-section__title:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
 .page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: var(--bg-page);
+  font-family: var(--font-family);
+  color: var(--text-light);
 }
 
-body {
+.main-content {
   flex: 1;
-  background-color: #181818;
-  backdrop-filter: blur(5px);
-  position: relative;
+  padding: 2rem 4rem;
+}
 
-  .search {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 25px 90px;
+// Overlay que escurece a tela quando o menu está aberto
+.page-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 90; // Deve estar acima de tudo, exceto o card ativo
+}
 
-    .search-title {
-      font-size: 28px;
-      color: white;
-      font-weight: 600;
-      margin-left: 50px;
+// ==========================================================================
+// SEÇÃO DE BUSCA E AÇÕES
+// ==========================================================================
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+
+  &__title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--text-light);
+    margin-right: auto; // Joga os outros elementos para a direita
+  }
+}
+
+.search-bar {
+  display: flex;
+  &__input {
+    width: 350px;
+    height: 42px;
+    padding: 0 1rem;
+    border: 1px solid var(--border-color);
+    border-right: none;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    background-color: var(--bg-input);
+    color: var(--text-light);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+
+    &::placeholder {
+      color: var(--text-mid);
     }
-
-    .search-bar {
-      margin: 0;
-      padding-right: 55px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
-    }
-
-    .search-input {
-      background-color: white;
-      width: 450px;
-      height: 35px;
-      padding: 5px 10px;
-      border-radius: 10px 0px 0px 10px;
-      outline: none;
-    }
-
-    .search-button {
-      background-color: white;
-      width: 50px;
-      height: 35px;
-      border-radius: 0px 10px 10px 0px;
-      outline: none;
-      img {
-        width: 17px;
-        height: 17px;
-        margin: 0 auto;
-      }
-    }
-
-    .add-button {
-      background-color: white;
-      font-weight: 600;
-      border-radius: 10px;
-      width: 20%;
-      padding: 5px 10px;
-      margin-left: 0px;
-      margin-right: 52px;
-      outline: none;
+    &:focus {
+      border-color: var(--accent-green);
+      background-color: var(--bg-card);
     }
   }
 
-  .cards {
-    background-color: #181818;
-    backdrop-filter: blur(5px);
-    padding: 22px 0;
-    display: flex;
-    justify-content: center;
+  &__button {
+    height: 42px;
+    width: 42px;
+    border: 1px solid var(--border-color);
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    background-color: var(--bg-input);
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: var(--accent-green);
+      color: var(--text-light);
+    }
+  }
+}
+
+.add-movie-button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 42px;
+  padding: 0 1.25rem;
+  background-color: var(--accent-green);
+  color: var(--text-light);
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--accent-green-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(56, 161, 105, 0.4);
+  }
+}
+
+// ==========================================================================
+// CARROSSEL E CARDS
+// ==========================================================================
+.card-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.carousel-control {
+  align-self: center;
+  border: none;
+  background: transparent;
+  color: var(--text-mid);
+  font-size: 2.5rem;
+  font-weight: 100;
+  cursor: pointer;
+  padding: 0 1rem;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+
+  &:hover:not(:disabled) {
+    background-color: var(--bg-card);
+    color: var(--text-light);
+  }
+
+  &:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+}
+
+.card {
+  width: 260px;
+  background: var(--bg-card);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 8px 25px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 1; // Camada padrão para cards
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px var(--shadow-color);
+    background-color: var(--accent-green);
+
+    .fa-star {
+      color: yellow;
+    }
+  }
+
+  // A MÁGICA: Sobe o card ativo para a camada mais alta
+  &.card--active {
+    z-index: 100;
+  }
+}
+
+// --- CONTEÚDO DO CARD ---
+.card__photo {
+  // Remova ou comente qualquer `aspect-ratio` ou `height` fixo aqui.
+  // As classes Tailwind (`w-full h-48 overflow-hidden` no HTML)
+  // já estão definindo a largura e altura do contêiner da imagem.
+  // O `img` dentro dele, com `w-full h-full object-cover`,
+  // fará o preenchimento e corte corretos.
+  // width: 100%; // Já coberto por w-full no Tailwind
+  // height: 192px; // Já coberto por h-48 no Tailwind
+  // object-fit: cover; // Já coberto por object-cover no img
+  // overflow: hidden; // Já coberto por overflow-hidden
+  // aspect-ratio: 10 / 13; // REMOVA OU COMENTE ESTA LINHA!
+
+  img {
+    // Estas regras são boas e complementam o Tailwind
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.card__content {
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card__title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  min-height: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.card__analysis {
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  line-height: 1.4;
+  height: 60px; // Altura fixa para a descrição
+  overflow-y: auto; // Scroll se o texto for longo
+  flex-grow: 1; // Ocupa o espaço disponível
+  margin-bottom: 1rem;
+}
+
+.card__rating {
+  .fa-star {
+    color: var(--accent-yellow);
+    margin: 0 2px;
+  }
+}
+
+// CORREÇÃO: Centralização do rodapé do card
+.card__footer {
+  padding: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  min-height: 50px; // Garante altura mínima
+  // Flexbox para centralizar
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    height: 20px; // Altura fixa para o logo
+    width: auto;
+    opacity: 0.5;
+  }
+}
+
+// --- MENU DROPDOWN DO CARD ---
+.card__menu {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 10;
+}
+
+.card__menu-trigger {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  color: var(--text-light);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background: var(--accent-green);
+  }
+}
+
+.card__menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 140px;
+  background-color: var(--bg-input);
+  border-radius: var(--border-radius);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  padding: 0.5rem;
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+
+  &.is-active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  text-align: left;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--accent-green);
+  }
+
+  .fa-trash-alt {
+    color: var(--text-mid);
+    transition: color 0.2s;
+  }
+
+  &:hover .fa-trash-alt {
+    color: var(--text-light);
+  }
+}
+
+// ==========================================================================
+// RESPONSIVIDADE
+// ==========================================================================
+
+@media (max-width: 1200px) {
+  .card-carousel {
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1.5rem;
+  }
+
+  .search-section {
+    flex-direction: column;
+    align-items: stretch;
+
+    &__title {
+      text-align: center;
+    }
+  }
+
+  .search-bar__input {
+    width: 100%;
+  }
+
+  .card-carousel {
+    flex-direction: column;
     align-items: center;
+  }
 
-    .scroll {
-      color: white;
-      font-size: 35px;
-      margin: 40px;
-      outline: none;
-    }
-
-    .disabled {
-      visibility: hidden;
-      cursor: unset;
-    }
-
-    .card {
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      margin: 20px;
-      width: 20%;
-      height: 550px;
-      transition: transform 0.2s;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background-color: white;
-
-      &:hover {
-        transform: scale(1.03);
-      }
-
-      .photo {
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 10px;
-        }
-      }
-
-      .card-content {
-        text-align: center;
-        cursor: pointer;
-        height: 300px;
-
-        h2 {
-          font-size: 21px;
-          font-weight: 600;
-          height: 100px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        p {
-          height: 70px;
-          max-height: 70px;
-          overflow-y: auto;
-        }
-      }
-
-      .rating {
-        margin-top: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .fa-star {
-          color: #eab308;
-          margin-right: 4px;
-          font-size: 20px;
-          transition: transform 0.3s;
-        }
-
-        .fa-star:hover {
-          transform: scale(1.2);
-        }
-      }
-
-      .footer {
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 10px;
-
-        img {
-          width: 30%;
-        }
-      }
-    }
+  .carousel-control {
+    display: none; // Esconde as setas na visão de coluna única
   }
 }
